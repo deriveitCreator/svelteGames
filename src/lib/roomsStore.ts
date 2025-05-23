@@ -9,13 +9,9 @@ var clientRooms: {
 
 export var wss: WebSocketServer;
 
-export async function initWebSocketServer(){
+export async function initWebSocketServer(server?: any){
   console.log("Starting websocket server...");
-  let server; 
-    let indexPath = "../../build/index";
-    server = (await import(indexPath)).server;
-    console.log("Using already existing server for websocket.");
-  wss = new WebSocketServer(server, () => {
+  wss = new WebSocketServer(server || {port: 5000}, () => {
     console.log("Websocket server opened");
   });
   wss.on('connection', (ws) => {
