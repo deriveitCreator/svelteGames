@@ -12,14 +12,9 @@ export var wss: WebSocketServer;
 export async function initWebSocketServer(){
   console.log("Starting websocket server...");
   let server; 
-  try {
     let indexPath = "../../build/index";
     server = (await import(indexPath)).server;
-    console.log("Using already existing server");
-  }
-  catch {
-    server = {port: 3000};
-  };
+    console.log("Using already existing server for websocket.");
   wss = new WebSocketServer(server, () => {
     console.log("Websocket server opened");
   });
