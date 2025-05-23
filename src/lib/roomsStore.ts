@@ -10,10 +10,12 @@ var clientRooms: {
 export var wss: WebSocketServer;
 
 export async function initWebSocketServer(){
-  console.log("Starting webscocket server...");
+  console.log("Starting websocket server...");
   let server; 
   try {
-    server = (await import("../../build/index")).server;
+    let indexPath = "../../build/index";
+    server = (await import(indexPath)).server;
+    console.log("Using already existing server");
   }
   catch {
     server = {port: 3000};
