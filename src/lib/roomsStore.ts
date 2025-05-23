@@ -45,6 +45,7 @@ export async function initWebSocketServer(input: Server | number){
             console.log("No handler for: ", data.toString('utf-8'));
             ws.send(WS_MSG.NO_HANDLER_FOR_GIVEN_INPUT);
           }
+          console.log("clientRooms", clientRooms);
         }
         else if (inputObj["type"] == "ping") ws.send("pong");
       }
@@ -71,6 +72,7 @@ function createNewRoom(userId: string, gameId: string, roomCode: number, ws: Web
     ws.send(WS_MSG.GAME_CREATED);
     res.default(userId, gameId, roomCode, ws, initStart);
   });
+  console.log("clientRooms", clientRooms);
 }
 
 function joinRoom(userId: string, gameId: string, roomCode: number, ws: WebSocket, sentObj: Object){
