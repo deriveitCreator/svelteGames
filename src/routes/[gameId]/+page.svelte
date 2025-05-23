@@ -55,7 +55,7 @@
     if(data.isOnlineMultiplayer) {
       //for some reason the first websockets don't work,
       // so i'm sending this dummy socket that will immediately close.
-      const tempSocket = new WebSocket(`wss://sveltegames.onrender.com:5000`);
+      const tempSocket = new WebSocket(`wss://sveltegames.onrender.com:3000`);
       tempSocket.onopen = () => {
         tempSocket.close(1000, 'Closing after open');
       };

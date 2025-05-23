@@ -1,5 +1,6 @@
 import { WebSocketServer, WebSocket } from "ws";
 import WS_MSG from "./wsMessages";
+import { app } from "../../server.js";
 
 export var wss: WebSocketServer;
 
@@ -11,7 +12,7 @@ var clientRooms: {
 
 export function initWebSocketServer(){
   console.log("Starting webscocket server...");
-  wss = new WebSocketServer({ port: 5000 }, () => {
+  wss = new WebSocketServer({ app }, () => {
     console.log("Websocket server opened");
   });
   wss.on('connection', (ws) => {

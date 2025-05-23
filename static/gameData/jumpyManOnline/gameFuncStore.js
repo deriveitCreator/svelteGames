@@ -43,7 +43,7 @@ window.gameFunc = async (input) => {
 }
 
 function createWS(){
-  window.gameSocket = new WebSocket(`wss://sveltegames.onrender.com:5000`);
+  window.gameSocket = new WebSocket(`wss://sveltegames.onrender.com:3000`);
   window.socketCloseFunc = () =>{
     window.clearInterval(curInterval);
     window.gameSocket.send(
