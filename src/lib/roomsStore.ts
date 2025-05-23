@@ -11,7 +11,8 @@ export var wss: WebSocketServer;
 
 export async function initWebSocketServer(server?: any){
   console.log("Starting websocket server...");
-  wss = new WebSocketServer(server || {port: 5000}, () => {
+  var curServer = server || {port: 5000};
+  wss = new WebSocketServer(curServer, () => {
     console.log("Websocket server opened");
   });
   wss.on('connection', (ws) => {
