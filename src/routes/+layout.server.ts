@@ -1,5 +1,5 @@
 import { wss, initWebSocketServer } from "$lib/roomsStore";
 
 export function load(){
-  if (!wss) initWebSocketServer({port: 5000});
+  if (!wss) initWebSocketServer(5000);
 }
