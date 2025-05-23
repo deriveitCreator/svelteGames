@@ -2,6 +2,7 @@
   import { getGameIds } from "$lib/gameData";
   import GameCard from "$lib/gameCard.svelte";
   const gameIds = getGameIds();
+  console.clear();
 </script>
 
 <svelte:head>

@@ -38,10 +38,10 @@
         margin-block: 10px;
         margin: 0px;
         text-align: center;
-        font-size: 16px;
+        font-size: 14px;
         font-weight: bold;
         text-overflow: ellipsis;
-        padding: 5px;
+        padding: 4px;
         transition: 0.5s;
       }
     }
