@@ -24,6 +24,7 @@ export async function initWebSocketServer(input: Server | number){
         //@ts-ignore
         var inputObj: {userId: string, gameId: string, roomCode: number, msg: string, obj?: Object} | {type: string} = 
         JSON.parse(data.toString('utf-8'));
+        console.log("TESTING", inputObj);
         if (!("type" in inputObj)) {
           if (inputObj.msg == WS_MSG.TRYING_TO_CREATE) //@ts-ignore
             createNewRoom(inputObj.userId,inputObj.gameId, inputObj.roomCode,ws, inputObj.obj);
@@ -45,6 +46,7 @@ export async function initWebSocketServer(input: Server | number){
             ws.send(WS_MSG.NO_HANDLER_FOR_GIVEN_INPUT);
           }
         }
+        else if (inputObj["type"] == "ping") ws.send("pong");
       }
       catch (e) {
         console.log(e);
@@ -60,6 +62,7 @@ function createNewRoom(userId: string, gameId: string, roomCode: number, ws: Web
     ws.send(WS_MSG.ROOM_CODE_ALREADY_BEING_USED);
     return;
   } 
+  console.log("Creating new room...");
   clientRooms[gameId][roomCode] = [new Map(), {}, null];
   clientRooms[gameId][roomCode][0].set(userId, ws);
   import(`./gameFuncs/${gameId}.ts`)
