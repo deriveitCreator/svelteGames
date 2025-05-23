@@ -1,6 +1,5 @@
 import { WebSocketServer, WebSocket } from "ws";
 import WS_MSG from "./wsMessages";
-import { getServerVar } from "./serverStore";
 
 var clientRooms: {
   [gameId: string]: {
@@ -9,9 +8,16 @@ var clientRooms: {
 } = {};
 
 export var wss: WebSocketServer;
-export function initWebSocketServer(){
+
+export async function initWebSocketServer(){
   console.log("Starting webscocket server...");
-  const server = getServerVar() || {port: 3000};
+  let server; 
+  try {
+    server = (await import("../../build/index")).server;
+  }
+  catch {
+    server = {port: 3000};
+  };
   wss = new WebSocketServer(server, () => {
     console.log("Websocket server opened");
   });
