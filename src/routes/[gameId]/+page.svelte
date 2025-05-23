@@ -5,13 +5,6 @@
 	let { data }: {data: {gameId:string, title:string, description: string, jsLoc: string, isOnlineMultiplayer: boolean}} = $props();
 
   onMount(()=> {
-    //for some reason the first websockets don't work,
-    // so i'm sending this dummy socket that will immediately close.
-    const tempSocket = new WebSocket(`ws://localhost:5000/jumpyManOnline`);
-    tempSocket.onopen = () => {
-      tempSocket.close(1000, 'Closing after open');
-    };
-
     //@ts-ignore
     window.WS_MSG = WS_MSG;
     let randChar = (Math.ceil(Math.random() * 25)+10).toString(36);
@@ -60,6 +53,13 @@
       e.preventDefault();
     });
     if(data.isOnlineMultiplayer) {
+      //for some reason the first websockets don't work,
+      // so i'm sending this dummy socket that will immediately close.
+      const tempSocket = new WebSocket(`wss://sveltegames.onrender.com:5000`);
+      tempSocket.onopen = () => {
+        tempSocket.close(1000, 'Closing after open');
+      };
+
       const script = document.createElement('script');
       script.src = `/gameData/${data.gameId}/gameFuncStore.js`;
       document.body.appendChild(script);
