@@ -12,16 +12,12 @@ export var wss: WebSocketServer;
 
 export async function initWebSocketServer(input: Server | number){
   console.log("Starting websocket server...");
-  if (typeof input === 'number'){
-    wss = new WebSocketServer({port: input}, () => {
-      console.log("Websocket server opened");
-    });
-  }
-  else {
-    wss = new WebSocketServer({server: input}, () => {
-      console.log("Websocket server opened");
-    });
-  }
+  // wss = new WebSocketServer({port: input as number}, () => {
+  //  console.log("Websocket server opened");
+  //});
+  wss = new WebSocketServer({server: input as Server}, () => {
+    console.log("Websocket server opened");
+  });
   wss.on('connection', (ws) => {
     ws.on('message', (data) => {
       try{

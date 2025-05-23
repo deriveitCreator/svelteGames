@@ -6,6 +6,10 @@
 
   onMount(()=> {
     //@ts-ignore
+    window.wsURL = "wss://sveltegames.onrender.com";
+    //window.wsURL = "wss://localhost:5000";
+
+    //@ts-ignore
     window.WS_MSG = WS_MSG;
     let randChar = (Math.ceil(Math.random() * 25)+10).toString(36);
     let randChar2 = (Math.ceil(Math.random() * 25)+10).toString(36);
@@ -53,9 +57,10 @@
       e.preventDefault();
     });
     if(data.isOnlineMultiplayer) {
-      //for some reason the first websockets don't work,
+      // for some reason the first websockets don't work,
       // so i'm sending this dummy socket that will immediately close.
-      const tempSocket = new WebSocket(`wss://sveltegames.onrender.com:3000`);
+      //@ts-ignore
+      const tempSocket = new WebSocket(window.wsURL);
       tempSocket.onopen = () => {
         tempSocket.close(1000, 'Closing after open');
       };
