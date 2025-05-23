@@ -43,7 +43,7 @@ window.gameFunc = async (input) => {
 }
 
 function createWS(){
-  window.gameSocket = new WebSocket(`ws://${window.location.host}/jumpyManOnline`);
+  window.gameSocket = new WebSocket(`wss://${window.location.hostname}:5000/jumpyManOnline`);
   window.socketCloseFunc = () =>{
     window.clearInterval(curInterval);
     window.gameSocket.send(

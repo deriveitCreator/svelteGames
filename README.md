@@ -2,11 +2,14 @@
 
 A website dedicated for my browser games.
 
-
 ## Updates
 
 Versioning is done using "npm version [new-version] --git-tag-version false".
 Minor updates always start with 1.
+
+update 2.2:
+- In `gameData.ts`, `MultiplayerIndex` was 1. Now it's correctly changed 2.
+- When connecting to websockets, `wss` is used instead of `ws`.
 
 update 2.1:
 - Added two games "Jumpy Man" and "Jumpy Man (Online Multiplayer)".

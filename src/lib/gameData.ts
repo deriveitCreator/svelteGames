@@ -1,6 +1,6 @@
 const titleIndex = 0;
 const descriptionIndex = 1;
-const MultiplayerIndex = 1;
+const MultiplayerIndex = 2;
 
 //id: [title, description as html, isOnlineMuliplayer]
 const gameInfos: {[key: string]: [string, string, boolean]} = {
@@ -25,6 +25,6 @@ export function getGameDescription(id: string): string {
   return gameInfos[id][descriptionIndex];
 }
 
-export function isGameOnlineMultiplayer(id: string): string {
+export function isGameOnlineMultiplayer(id: string): boolean {
   return gameInfos[id][MultiplayerIndex];
 }
