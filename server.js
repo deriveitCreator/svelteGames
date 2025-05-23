@@ -1,13 +1,13 @@
+import { handler } from './build/handler.js';
 import express from 'express';
+import { setServerVar } from "src/lib/serverStore";
 
-export const app = express();
+const app = express();
 
-async function start(){
-  const { handler } = await import('./build/handler.js');
-  // let SvelteKit handle everything else, including serving prerendered pages and static assets
-  app.use(handler);
+// let SvelteKit handle everything else, including serving prerendered pages and static assets
+app.use(handler);
 
-  app.listen(3000, () => {
-    console.log('listening on port 3000');
-  });
-}
+app.listen(3000, () => {
+  setServerVar(app);
+	console.log('listening on port 3000');
+});
