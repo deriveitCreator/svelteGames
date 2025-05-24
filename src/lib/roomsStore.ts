@@ -72,7 +72,6 @@ function createNewRoom(userId: string, gameId: string, roomCode: number, ws: Web
     ws.send(WS_MSG.GAME_CREATED);
     res.default(userId, gameId, roomCode, ws, initStart);
   });
-  console.log("clientRooms", clientRooms);
 }
 
 function joinRoom(userId: string, gameId: string, roomCode: number, ws: WebSocket, sentObj: Object){
@@ -130,6 +129,7 @@ export function getWWS() { return wss; }
 export function getAllRooms(){ return clientRooms; }
 
 export function roomExists(gameId: string, roomCode: number): boolean {
+  console.log("roomExists", clientRooms);
   if (!(gameId in clientRooms)) return false;
   else if (!(roomCode in clientRooms[gameId])) return false;
   return true;
