@@ -2,6 +2,8 @@ import { WebSocketServer, WebSocket} from "ws";
 import WS_MSG from "./wsMessages";
 import type { Server } from 'http';
 
+const modules = import.meta.glob('./gameFuncs/*.ts');
+
 var clientRooms: {
   [gameId: string]: {
     [roomNum: string]: [Map<string, WebSocket>, Object, Function | null]
@@ -57,7 +59,7 @@ export async function initWebSocketServer(input: Server | number){
   });
 }
 
-function createNewRoom(userId: string, gameId: string, roomCode: number, ws: WebSocket, initStart: Object){
+async function createNewRoom(userId: string, gameId: string, roomCode: number, ws: WebSocket, initStart: Object){
   if (!(gameId in clientRooms)) clientRooms[gameId] = {};
   if (roomCode in clientRooms[gameId]) {
     ws.send(WS_MSG.ROOM_CODE_ALREADY_BEING_USED);
@@ -66,12 +68,12 @@ function createNewRoom(userId: string, gameId: string, roomCode: number, ws: Web
   console.log("Creating new room...");
   clientRooms[gameId][roomCode] = [new Map(), {}, null];
   clientRooms[gameId][roomCode][0].set(userId, ws);
-  import(`./gameFuncs/${gameId}.ts`)
-  .then(res => {
-    clientRooms[gameId][roomCode][2] = res.default;
-    ws.send(WS_MSG.GAME_CREATED);
-    res.default(userId, gameId, roomCode, ws, initStart);
-  });
+  const module = await modules[`./gameFuncs/${gameId}.ts`]();
+  //@ts-ignore
+  clientRooms[gameId][roomCode][2] = module.default;
+  ws.send(WS_MSG.GAME_CREATED);
+  //@ts-ignore
+  module.default(userId, gameId, roomCode, ws, initStart);
   console.log("clientRooms", clientRooms);
 }
 
