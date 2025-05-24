@@ -2,7 +2,7 @@ import { WebSocketServer, WebSocket} from "ws";
 import WS_MSG from "./wsMessages";
 import type { Server } from 'http';
 
-var clientRooms: {
+export var clientRooms: {
   [gameId: string]: {
     [roomNum: string]: [Map<string, WebSocket>, Object, Function | null]
   },
@@ -123,29 +123,3 @@ function leavePlayerFromRoom(userId: string, gameId: string, roomCode: number){
   if (Object.keys(clientRooms[gameId]).length === 0) delete clientRooms[gameId];
 }
 
-export function getWWS() { return wss; }
-
-export function getAllRooms(){ return clientRooms; }
-
-export function roomExists(gameId: string, roomCode: number): boolean {
-  console.log("roomExists", clientRooms);
-  if (!(gameId in clientRooms)) return false;
-  else if (!(roomCode in clientRooms[gameId])) return false;
-  return true;
-}
-
-export function getTotalPlayers(gameId: string, roomCode: number){
-  if (roomExists(gameId, roomCode))
-    return clientRooms[gameId][roomCode][0].size;
-  return 0;
-}
-
-
-export function removeRoom(gameId: string, roomCode: number){
-  if (!(gameId in clientRooms))
-    throw new Error(`The function removeRoom tried to remove gameid "${gameId}", which isn't in rooms.`);
-  if(!clientRooms[gameId][roomCode])
-    throw new Error(`The function removeRoom tried to remove room ${roomCode} for game id ${gameId}, which doesn't exist.`);
-  delete clientRooms[gameId][roomCode];
-  if (Object.keys(clientRooms[gameId]).length) delete clientRooms[gameId];
-}
