@@ -17,33 +17,6 @@
     window.userId = randChar + randChar2 + "_" + (new Date()).getMilliseconds();
 
     //@ts-ignore
-    window.getAllRooms = () => {
-      fetch("/roomsFuncs", {
-        method: "POST",
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({method: "getAllRooms"})
-      })
-      .then(res => res.json())
-      .then(console.log)
-    }
-    //@ts-ignore
-    window.showWSSOnServer = () => {
-      fetch("/roomsFuncs", {
-        method: "POST",
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({method: "showWSS"})
-      })
-      .then(res => res.json())
-      .then(console.log)
-    }
-
-    //@ts-ignore
-    window.showWebSocket = () => {
-      //@ts-ignore
-      console.log(window.gameSocket);
-    }
-
-    //@ts-ignore
     if (window.Module) window.location.reload();
     //@ts-ignore
     let curCanvas: HTMLCanvasElement = document.getElementById("canvas");

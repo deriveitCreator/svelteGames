@@ -7,6 +7,9 @@ A website dedicated for my browser games.
 Versioning is done using "npm version [new-version] --git-tag-version false".
 Minor updates always start with 1.
 
+update 3.1:
+- Removed `+server.ts` in the first layout. Websockets are used instead of http requests.
+
 update 2.5 - 2.26:
 - Websocket link is now `sveltegames.onrender.com:3000`.
 - Added `server.ts`.

@@ -67,9 +67,8 @@ function createNewRoom(userId: string, gameId: string, roomCode: number, ws: Web
   import(`$lib/gameFuncs/${gameId}.ts`)
   .then(res => {
     clientRooms[gameId][roomCode][2] = res.default;
-    ws.send(WS_MSG.GAME_CREATED);
     res.default(userId, gameId, roomCode, ws, initStart);
-    console.log("createNewRoom", clientRooms);
+    ws.send(WS_MSG.GAME_CREATED);
   });
 }
 
@@ -79,7 +78,7 @@ function joinRoom(userId: string, gameId: string, roomCode: number, ws: WebSocke
     (roomCode in clientRooms[gameId]) && 
     (clientRooms[gameId][roomCode][0].size >= 1)
   )) { 
-    ws.send(WS_MSG.GAME_NOT_AVALIABLE);
+    ws.send(WS_MSG.GAME_NOT_AVAILABLE);
     return;
   }
   let func = clientRooms[gameId][roomCode][2]!;
@@ -102,7 +101,7 @@ function spectateRoom(userId: string, gameId: string, roomCode: number, ws: WebS
     (roomCode in clientRooms[gameId]) && 
     (clientRooms[gameId][roomCode][0].size >= 1)
   )) { 
-    ws.send(WS_MSG.GAME_NOT_AVALIABLE);
+    ws.send(WS_MSG.GAME_NOT_AVAILABLE);
     return;
   }
 

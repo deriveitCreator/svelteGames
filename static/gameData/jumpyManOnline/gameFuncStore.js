@@ -55,141 +55,98 @@ function createWS(){
 }
 
 async function createGame(){
-  let res, resJSON;
-  res = await fetch("/roomsFuncs", {
-    method: "POST",
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({method: "checkRoomExists", gameId: "jumpyManOnline", roomCode: roomCode})
-  });
-  resJSON = await res.json();
-  if (resJSON.exist)
-    Module.ccall("setTopText", "null", ["string"], ["Code already in use."]);
-  else {
-    createWS();
-    window.gameSocket.onmessage = (event) => {
-      if (event.data.includes(WS_MSG.JOINED_GAME)) startGame();
-      else if (event.data.includes(WS_MSG.FROM_SERVER_GAME_DATA)) {
-        let inputObj = JSON.parse(event.data.split("%")[1]);
-        updateGameInfo(inputObj);
-      }
-    };
-
-    let p1Here = {"p1Here": true};
-    if (window.gameSocket.readyState === WebSocket.OPEN) {
-      window.gameSocket.send(
-        JSON.stringify({userId: window.userId, gameId:"jumpyManOnline", roomCode: roomCode, msg: WS_MSG.TRYING_TO_CREATE, obj: p1Here})
-      );
+  window.playerNum = 1;
+  createWS();
+  window.gameSocket.onmessage = (event) => {
+    if (event.data.includes(WS_MSG.JOINED_GAME)) startGame();
+    else if (event.data.includes(WS_MSG.FROM_SERVER_GAME_DATA)) {
+      let inputObj = JSON.parse(event.data.split("%")[1]);
+      updateGameInfo(inputObj);
     }
-    else window.gameSocket.onopen = (event) => {
-      console.log("Websocket opened");
-      window.gameSocket.send(
-        JSON.stringify({userId: window.userId, gameId:"jumpyManOnline", roomCode: roomCode, msg: WS_MSG.TRYING_TO_CREATE, obj: p1Here})
-      );
-    }
+    else if (event.data.includes(WS_MSG.ROOM_CODE_ALREADY_BEING_USED)) 
+      Module.ccall("setTopText", "null", ["string"], ["Code already in use."]);
+    else if (event.data.includes(WS_MSG.GAME_CREATED)) 
+      Module.ccall("setTopText", "null", ["string"], ["Ask your friend to join..."]);
+  };
 
-    Module.ccall("setTopText", "null", ["string"], ["Ask your friend to join..."]);
-
-    window.playerNum = 1;
+  let p1Here = {"p1Here": true};
+  if (window.gameSocket.readyState === WebSocket.OPEN) {
+    window.gameSocket.send(
+      JSON.stringify({userId: window.userId, gameId:"jumpyManOnline", roomCode: roomCode, msg: WS_MSG.TRYING_TO_CREATE, obj: p1Here})
+    );
+  }
+  else window.gameSocket.onopen = (event) => {
+    console.log("Websocket opened");
+    window.gameSocket.send(
+      JSON.stringify({userId: window.userId, gameId:"jumpyManOnline", roomCode: roomCode, msg: WS_MSG.TRYING_TO_CREATE, obj: p1Here})
+    );
   }
 }
 
 async function joinGame(){
-  let res, resJSON;
-  res = await fetch("/roomsFuncs", {
-    method: "POST",
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({method: "checkRoomExists", gameId: "jumpyManOnline", roomCode: roomCode})
-  })
-  resJSON = await res.json();
-  if (resJSON.exist){
-    Module.ccall("setTopText", "null", ["string"], ["Checking if you can join..."]);
-    res = await fetch("/roomsFuncs", {
-      method: "POST",
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({method: "getTotalPlayers", gameId: "jumpyManOnline", roomCode: roomCode})
-    })
-    resJSON = await res.json();
+  window.playerNum = 2;
+  Module.ccall("setTopText", "null", ["string"], ["Checking if you can join..."]);
+  createWS();
 
-    if (resJSON.num >= 2) {
+  window.gameSocket.onmessage = (event) => {
+    if (event.data.includes(WS_MSG.JOINED_GAME)) startGame();
+    else if (event.data.includes(WS_MSG.FROM_SERVER_GAME_DATA)) {
+      let inputObj = JSON.parse(event.data.split("%")[1]);
+      updateGameInfo(inputObj);
+    }
+    else if (event.data.includes(WS_MSG.GAME_ALREADY_STARTED))
       Module.ccall("setTopText", "null", ["string"], ["Game already started."]);
-      return;
-    }
+    else if (event.data.includes(WS_MSG.GAME_NOT_AVAILABLE))
+      Module.ccall("setTopText", "null", ["string"], ["No game found."]);
+  };
 
-    createWS();
-
-    Module.ccall("setTopText", "null", ["string"], ["Joining..."]);
-    window.gameSocket.onmessage = (event) => {
-      if (event.data.includes(WS_MSG.JOINED_GAME)) startGame();
-      else if (event.data.includes(WS_MSG.FROM_SERVER_GAME_DATA)) {
-        let inputObj = JSON.parse(event.data.split("%")[1]);
-        updateGameInfo(inputObj);
-      }
-      else if (event.data.includes(WS_MSG.GAME_ALREADY_STARTED))
-        Module.ccall("setTopText", "null", ["string"], ["Game already started."]);
-    };
-
-      let sendObj = {"p2Here": true};
-    if (window.gameSocket.readyState === WebSocket.OPEN) {
-      window.gameSocket.send(
-        JSON.stringify({userId: window.userId, gameId:"jumpyManOnline", roomCode: roomCode, msg: WS_MSG.TRYING_TO_JOIN, obj: sendObj})
-      );
-    }
-    else window.gameSocket.onopen = (event) => {
-      console.log("Websocket opened");
-      window.gameSocket.send(
-        JSON.stringify({userId: window.userId, gameId:"jumpyManOnline", roomCode: roomCode, msg: WS_MSG.TRYING_TO_JOIN, obj: sendObj})
-      );
-    };
-
-    window.playerNum = 2;
+    let sendObj = {"p2Here": true};
+  if (window.gameSocket.readyState === WebSocket.OPEN) {
+    window.gameSocket.send(
+      JSON.stringify({userId: window.userId, gameId:"jumpyManOnline", roomCode: roomCode, msg: WS_MSG.TRYING_TO_JOIN, obj: sendObj})
+    );
   }
-  else
-    Module.ccall("setTopText", "null", ["string"], ["No game found."]);
+  else window.gameSocket.onopen = (event) => {
+    console.log("Websocket opened");
+    window.gameSocket.send(
+      JSON.stringify({userId: window.userId, gameId:"jumpyManOnline", roomCode: roomCode, msg: WS_MSG.TRYING_TO_JOIN, obj: sendObj})
+    );
+  };
 }
 
 async function spectateGame(){
-  let res, resJSON;
+  Module.ccall("setTopText", "null", ["string"], ["Checking if you can spectate..."]);
   res = await fetch("/roomsFuncs", {
     method: "POST",
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({method: "checkRoomExists", gameId: "jumpyManOnline", roomCode: roomCode})
-  });
+    body: JSON.stringify({method: "getTotalPlayers", gameId: "jumpyManOnline", roomCode: roomCode})
+  })
   resJSON = await res.json();
-  if (resJSON.exist){
-    Module.ccall("setTopText", "null", ["string"], ["Checking if you can join..."]);
-    res = await fetch("/roomsFuncs", {
-      method: "POST",
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({method: "getTotalPlayers", gameId: "jumpyManOnline", roomCode: roomCode})
-    })
-    resJSON = await res.json();
 
-    if (resJSON.num <= 1) {
-      Module.ccall("setTopText", "null", ["string"], ["Game not started."]);
-      return;
-    }
-
-    createWS();
-    Module.ccall("setTopText", "null", ["string"], ["Joining..."]);
-    window.gameSocket.onmessage = (event) => {
-      if (event.data.includes(WS_MSG.FROM_SERVER_GAME_DATA)) {
-        let inputObj = JSON.parse(event.data.split("%")[1]);
-        updateGameInfo(inputObj);
-      }
-    };
-
-    const onOpenStuff = () => {
-      window.gameSocket.send(
-        JSON.stringify({userId: window.userId, gameId:"jumpyManOnline", roomCode: roomCode, msg: WS_MSG.TRYING_TO_SPECTATE})
-      );
-      Module.ccall("startGame", null, null, null); 
-    }
-
-    if (window.gameSocket.readyState === WebSocket.OPEN) onOpenStuff();
-    else window.gameSocket.onopen = () => { onOpenStuff() };
+  if (resJSON.num <= 1) {
+    Module.ccall("setTopText", "null", ["string"], ["Game not started."]);
+    return;
   }
-  else
-    Module.ccall("setTopText", "null", ["string"], ["No game found."]);
+
+  createWS();
+  window.gameSocket.onmessage = (event) => {
+    if (event.data.includes(WS_MSG.FROM_SERVER_GAME_DATA)) {
+      let inputObj = JSON.parse(event.data.split("%")[1]);
+      updateGameInfo(inputObj);
+    }
+    else if (event.data.includes(WS_MSG.GAME_NOT_AVAILABLE)) 
+      Module.ccall("setTopText", "null", ["string"], ["No game found."]);
+  };
+
+  const onOpenStuff = () => {
+    window.gameSocket.send(
+      JSON.stringify({userId: window.userId, gameId:"jumpyManOnline", roomCode: roomCode, msg: WS_MSG.TRYING_TO_SPECTATE})
+    );
+    Module.ccall("startGame", null, null, null); 
+  }
+
+  if (window.gameSocket.readyState === WebSocket.OPEN) onOpenStuff();
+  else window.gameSocket.onopen = () => { onOpenStuff() };
 }
 
 function startGame(){ 
