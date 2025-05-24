@@ -2,6 +2,7 @@ import { WebSocketServer, WebSocket} from "ws";
 import WS_MSG from "./wsMessages";
 import type { Server } from 'http';
 
+//@ts-ignore
 const modules = import.meta.glob('./gameFuncs/*.ts');
 
 var clientRooms: {
@@ -47,7 +48,6 @@ export async function initWebSocketServer(input: Server | number){
             console.log("No handler for: ", data.toString('utf-8'));
             ws.send(WS_MSG.NO_HANDLER_FOR_GIVEN_INPUT);
           }
-          console.log("clientRooms", clientRooms);
         }
         else if (inputObj["type"] == "ping") ws.send("pong");
       }
