@@ -69,7 +69,7 @@ export default function jumpyManOnline(
     return true;
   }
   else if ("p1Here" in sentObj) serverObj.p2Here = false;
-  else if (("allowSpectate" in sentObj) && ("p2Here" in serverObj)) 
+  else if (("canSpectate" in sentObj) && ("p2Here" in serverObj)) 
     return serverObj["p2Here"];
   return false;
 } 

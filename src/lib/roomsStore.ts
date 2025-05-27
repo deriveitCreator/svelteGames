@@ -61,7 +61,7 @@ function createNewRoom(userId: string, gameId: string, roomCode: number, ws: Web
     ws.send(WS_MSG.ROOM_CODE_ALREADY_BEING_USED);
     return;
   } 
-  console.log("Creating new room...");
+  console.log(`Creating new room (${gameId}, ${roomCode})...`);
   clientRooms[gameId][roomCode] = [new Map(), {}, null];
   clientRooms[gameId][roomCode][0].set(userId, ws);
   import(`$lib/gameFuncs/${gameId}.ts`)
@@ -69,6 +69,7 @@ function createNewRoom(userId: string, gameId: string, roomCode: number, ws: Web
     clientRooms[gameId][roomCode][2] = res.default;
     res.default(userId, gameId, roomCode, ws, initStart);
     ws.send(WS_MSG.GAME_CREATED);
+    console.log(`Created new room (${gameId}, ${roomCode}).`);
   });
 }
 
@@ -105,11 +106,18 @@ function spectateRoom(userId: string, gameId: string, roomCode: number, ws: WebS
     return;
   }
 
-  clientRooms[gameId][roomCode][0].set(userId, ws);
-  let numOfPlayers = clientRooms[gameId][roomCode][0].size;
-  clientRooms[gameId][roomCode][0].forEach((w)=>{
-    w.send(`${WS_MSG.NUM_OF_PLAYERS}%${numOfPlayers}`);
-  });
+  let func = clientRooms[gameId][roomCode][2]!;
+  let map = clientRooms[gameId][roomCode][0];
+  let serverObj = clientRooms[gameId][roomCode][1];
+  if (func(userId, map, serverObj, {canSpectate: true})) {
+    ws.send(WS_MSG.ALLOW_SPECTATE_GAME);
+    clientRooms[gameId][roomCode][0].set(userId, ws);
+    let numOfPlayers = clientRooms[gameId][roomCode][0].size;
+    clientRooms[gameId][roomCode][0].forEach((w)=>{
+      w.send(`${WS_MSG.NUM_OF_PLAYERS}%${numOfPlayers}`);
+    });
+  }
+  else ws.send(WS_MSG.GAME_NOT_AVAILABLE);
 }
 
 function leavePlayerFromRoom(userId: string, gameId: string, roomCode: number){

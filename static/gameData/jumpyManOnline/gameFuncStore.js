@@ -1,6 +1,7 @@
 var lastCharTime = Date.now();
 var roomCode;
 var curInterval = -1;
+var curSpectating = false;
 
 //All inputs are arrays of two elements
 window.gameFunc = async (input) => {
@@ -8,6 +9,7 @@ window.gameFunc = async (input) => {
     window.gameSocket.readyState == window.gameSocket.OPEN ||
     window.gameSocket.readyState == window.gameSocket.CONNECTING
   );
+  curSpectating = false;
   switch (input[0]){
     case "CREATE":
       roomCode = parseInt(input[1]);
@@ -100,7 +102,7 @@ async function joinGame(){
       Module.ccall("setTopText", "null", ["string"], ["No game found."]);
   };
 
-    let sendObj = {"p2Here": true};
+  let sendObj = {"p2Here": true};
   if (window.gameSocket.readyState === WebSocket.OPEN) {
     window.gameSocket.send(
       JSON.stringify({userId: window.userId, gameId:"jumpyManOnline", roomCode: roomCode, msg: WS_MSG.TRYING_TO_JOIN, obj: sendObj})
@@ -116,26 +118,18 @@ async function joinGame(){
 
 async function spectateGame(){
   Module.ccall("setTopText", "null", ["string"], ["Checking if you can spectate..."]);
-  res = await fetch("/roomsFuncs", {
-    method: "POST",
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({method: "getTotalPlayers", gameId: "jumpyManOnline", roomCode: roomCode})
-  })
-  resJSON = await res.json();
-
-  if (resJSON.num <= 1) {
-    Module.ccall("setTopText", "null", ["string"], ["Game not started."]);
-    return;
-  }
-
   createWS();
   window.gameSocket.onmessage = (event) => {
-    if (event.data.includes(WS_MSG.FROM_SERVER_GAME_DATA)) {
+    if (curSpectating && event.data.includes(WS_MSG.FROM_SERVER_GAME_DATA)) {
       let inputObj = JSON.parse(event.data.split("%")[1]);
       updateGameInfo(inputObj);
     }
     else if (event.data.includes(WS_MSG.GAME_NOT_AVAILABLE)) 
       Module.ccall("setTopText", "null", ["string"], ["No game found."]);
+    else if (event.data.includes(WS_MSG.ALLOW_SPECTATE_GAME)){
+      Module.ccall("startGame", null, null, null); 
+      curSpectating = true;
+    }
   };
 
   const onOpenStuff = () => {
