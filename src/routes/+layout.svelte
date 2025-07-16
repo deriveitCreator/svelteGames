@@ -2,7 +2,7 @@
 	let { children } = $props();
 </script>
 
-<header><a href="/"><h1>Svelte Games</h1><small>by Uzair</small></a></header>
+<header><a href="/"><h1>Svelte Games</h1></a></header>
 <main>{@render children()}</main>
 <footer>
   <span>

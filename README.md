@@ -7,6 +7,10 @@ A website dedicated for my browser games.
 Versioning is done using "npm version [new-version] --git-tag-version false".
 Minor updates always start with 1.
 
+update 4.1:
+- Added a new game: Platform Shooters.
+- Added more content to Jumpy Man.
+
 update 3.2:
 - Added code to support spectating functionality for "jumpy Man (Online Multiplayer)".
 

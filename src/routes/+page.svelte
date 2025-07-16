@@ -6,7 +6,7 @@
 </script>
 
 <svelte:head>
-  <title>Svelte Games by Uzair</title> 
+  <title>Svelte Games</title> 
 </svelte:head>
 
 <section id="gameSelection">
