@@ -1,21 +1,9 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import WS_MSG from '$lib/wsMessages';
 
-	let { data }: {data: {gameId:string, title:string, description: string, jsLoc: string, isOnlineMultiplayer: boolean}} = $props();
+	let { data }: {data: {gameId:string, title:string, description: string, jsLoc: string}} = $props();
 
   onMount(()=> {
-    //@ts-ignore
-    window.wsURL = "wss://sveltegames.onrender.com";
-    //window.wsURL = "wss://localhost:5000";
-
-    //@ts-ignore
-    window.WS_MSG = WS_MSG;
-    let randChar = (Math.ceil(Math.random() * 25)+10).toString(36);
-    let randChar2 = (Math.ceil(Math.random() * 25)+10).toString(36);
-    //@ts-ignore
-    window.userId = randChar + randChar2 + "_" + (new Date()).getMilliseconds();
-
     //@ts-ignore
     if (window.Module) window.location.reload();
     //@ts-ignore
@@ -29,27 +17,6 @@
     curCanvas.addEventListener('keydown', (e) => {
       e.preventDefault();
     });
-    if(data.isOnlineMultiplayer) {
-      // for some reason the first websockets don't work,
-      // so i'm sending this dummy socket that will immediately close.
-      //@ts-ignore
-      const tempSocket = new WebSocket(window.wsURL);
-      tempSocket.onopen = () => {
-        tempSocket.close(1000, 'Closing after open');
-      };
-
-      const script = document.createElement('script');
-      script.src = `/gameData/${data.gameId}/gameFuncStore.js`;
-      document.body.appendChild(script);
-
-      return ()=>{
-        //@ts-ignore
-        if (window.gameSocket && ( //@ts-ignore
-          window.gameSocket.readyState == window.gameSocket.OPEN ||  //@ts-ignore
-          window.gameSocket.readyState == window.gameSocket.CONNECTING //@ts-ignore
-        )) window.socketCloseFunc(); 
-      }
-    }
   });
 </script>
 
