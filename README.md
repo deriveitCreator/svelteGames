@@ -5,10 +5,14 @@ A website dedicated for my browser games.
 ## Updates
 
 Versioning is done using "npm version [new-version] --git-tag-version false".
-Minor updates always start with 1.
+Updates follow this format: `[major change].[minor change]`, and minor updates always start with 1.
+
+update 6.1:
+- New logo.
+- Completely changed the code for `platformShooters`.
 
 update 5.1:
-- Removed all websocket and multiplayer stuff. Future games will have websocket built in wwith their own backend.
+- Removed all websocket and multiplayer stuff. Online multiplayer games will have their own backends.
 
 update 4.1:
 - Added a new game: Platform Shooters.

@@ -1,7 +1,7 @@
 {
 	"name": "sveltegames",
 	"private": true,
-	"version": "4.1.0",
+	"version": "6.1.0",
 	"type": "module",
 	"author": "Uzair Arif",
 	"scripts": {
