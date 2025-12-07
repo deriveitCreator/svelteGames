@@ -7,9 +7,14 @@ A website dedicated for my browser games.
 Versioning is done using "npm version [new-version] --git-tag-version false".
 Updates follow this format: `[major change].[minor change]`, and minor updates always start with 1.
 
+update 6.2:
+- Fixed some bugs in "Platform Shooters".
+  - Bug 1: When two bullets are on screen, one of them would disappear. 
+  - Bug 2: Cursor would not change to default after clicking the play button. 
+
 update 6.1:
 - New logo.
-- Completely changed the code for `platformShooters`.
+- Completely changed the code for "Platform Shooters".
 
 update 5.1:
 - Removed all websocket and multiplayer stuff. Online multiplayer games will have their own backends.
