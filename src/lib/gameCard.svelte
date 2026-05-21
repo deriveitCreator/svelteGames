@@ -15,13 +15,18 @@
     margin: 20px;
     border-radius: 10px;
     width: 120px;
+    overflow: hidden;
+    z-index: 1;
 
     a{
+      border-radius: 10px !important;
       display: block;
       color: black;
       text-decoration: none;
-      transition: 0.5s;
+      transition: 0.5s linear background-color;
       overflow: hidden;
+      z-index: 0;
+      will-change: transform;
 
       .imgContainer{
         background-repeat: no-repeat;
@@ -42,7 +47,7 @@
         font-weight: bold;
         text-overflow: ellipsis;
         padding: 4px;
-        transition: 0.5s;
+        transition: 0.5s linear background-color;
       }
     }
 

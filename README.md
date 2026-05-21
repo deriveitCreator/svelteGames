@@ -7,6 +7,9 @@ A website dedicated for my browser games.
 Versioning is done using "npm version [new-version] --git-tag-version false".
 Updates follow this format: `[major change].[minor change]`, and minor updates always start with 1.
 
+update 7.1:
+- Added a new game (Zero Players Games).
+
 update 6.2:
 - Fixed some bugs in "Platform Shooters".
   - Bug 1: When two bullets are on screen, one of them would disappear. 

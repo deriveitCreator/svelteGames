@@ -1,7 +1,7 @@
 {
 	"name": "sveltegames",
 	"private": true,
-	"version": "6.2.0",
+	"version": "7.1.0",
 	"type": "module",
 	"author": "Uzair Arif",
 	"scripts": {
@@ -21,6 +21,7 @@
 		"@sveltejs/kit": "^2.16.0",
 		"@sveltejs/vite-plugin-svelte": "^5.0.0",
 		"@types/express": "^5.0.2",
+		"@types/node": "^25.9.0",
 		"@types/ws": "^8.18.1",
 		"eslint": "^9.18.0",
 		"eslint-plugin-svelte": "^3.0.0",
