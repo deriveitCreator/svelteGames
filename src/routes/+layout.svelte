@@ -42,14 +42,6 @@
         border-bottom: solid 1px var(--text-color);
       }
 
-      small{
-        text-align: center;
-        width: 100%;
-        font-size: 15px;
-        display: block;
-        padding: 7px 0px;
-      }
-
       &:visited{
         text-decoration: none;
         color: var(--text-color);

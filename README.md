@@ -7,6 +7,10 @@ A website dedicated for my browser games.
 Versioning is done using "npm version [new-version] --git-tag-version false".
 Updates follow this format: `[major change].[minor change]`, and minor updates always start with 1.
 
+update 7.2:
+- In `squareRace1`, the death rectangle now has a stopping stop.
+- Removed an unused CSS.
+
 update 7.1:
 - Added a new game (Zero Players Games).
 
